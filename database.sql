@@ -36,3 +36,19 @@ CREATE TABLE Programs (
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
+
+CREATE TABLE ModuleCourse (
+  module_id INTEGER NOT NULL,
+  course_id INTEGER NOT NULL,
+  PRIMARY KEY (module_id, course_id),
+  FOREIGN KEY (module_id) REFERENCES Modules(id),
+  FOREIGN KEY (course_id) REFERENCES Courses(id)
+);
+
+CREATE TABLE ProgramModule (
+  program_id INTEGER NOT NULL,
+  module_id INTEGER NOT NULL,
+  PRIMARY KEY (program_id, module_id),
+  FOREIGN KEY (program_id) REFERENCES Programs(id),
+  FOREIGN KEY (module_id) REFERENCES Modules(id)
+);
