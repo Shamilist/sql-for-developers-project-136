@@ -1,35 +1,38 @@
-CREATE TABLE courses (
+CREATE TABLE Lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    course_name VARCHAR(255),
-    course_content VARCHAR(255),
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
-);
-
-CREATE TABLE lessons (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    lesson_name VARCHAR(255),
-    lesson_content VARCHAR(255),
+    name VARCHAR(255),
+    content TEXT,
     video_link VARCHAR(255),
-    lesson_in_course_position INT,
+    position INT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    course_id BIGINT REFERENCES courses (id)
+    course_id BIGINT REFERENCES Courses (id),
+    is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE modules (
+CREATE TABLE Courses (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    module_name VARCHAR(255),
-    module_content VARCHAR(255),
+    module_id BIGINT REFERENCES modules (id),
+    name VARCHAR(255),
+    content TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE Modules (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name VARCHAR(255),
+    content VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
-CREATE TABLE programs (
+CREATE TABLE Programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    program_name VARCHAR(255),
-    program_price NUMERIC,
-    program_type VARCHAR(255),
+    name VARCHAR(255),
+    price NUMERIC,
+    type VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
