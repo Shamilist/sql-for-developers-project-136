@@ -89,3 +89,24 @@ CREATE TABLE Payments (
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
+
+CREATE TABLE ProgramCompletions (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (user_id) REFERENCES Users(id),
+  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  status ENUM('active', 'completed', 'pending', 'cancelled') NOT NULL,
+  start_at TIMESTAMP,
+  end_at TIMESTAMP,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+CREATE TABLE Certificates (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (user_id) REFERENCES Users(id),
+  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  url VARCHAR(255),
+  release_at TIMESTAMP,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
