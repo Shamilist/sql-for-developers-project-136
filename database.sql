@@ -55,7 +55,7 @@ CREATE TABLE ProgramModule (
 
 CREATE TABLE Users (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (role_id) REFERENCES UserRole (id),
+  user_role ENUM('студент', 'учитель', 'админ') NOT NULL,
   full_name VARCHAR(255),
   email VARCHAR(255),
   password_hash VARCHAR(255),
@@ -71,10 +71,21 @@ CREATE TABLE TeachingGroups (
   updated_at TIMESTAMP
 );
 
-CREATE TABLE UserRole (
+CREATE TABLE Enrollments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(255)
+  FOREIGN KEY (user_id) REFERENCES Users(id),
+  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  status ENUM('active', 'pending', 'cancelled', 'completed') NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
 );
 
-INSERT INTO UserRole VALUES ('сутдент', 'учитель', 'админ');
-
+CREATE TABLE Payments (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (enrollment_id) REFERENCES Enrollments(id),
+  amount NUMERIC,
+  status ENUM('pending', 'paid', 'failed', 'refunded') NOT NULL,
+  date TIMESTAMP,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
