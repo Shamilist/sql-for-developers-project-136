@@ -128,3 +128,21 @@ CREATE TABLE Exercises (
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
+
+CREATE TABLE Discussions (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (lesson_id) REFERENCES Lessons(id),
+  debate TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+CREATE TABLE Blog (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (user_id) REFERENCES Users(id),
+  title TEXT,
+  content TEXT,
+  status ENUM('created', 'in moderation', 'published', 'archived') NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
