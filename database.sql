@@ -1,4 +1,4 @@
-CREATE TABLE Lessons (
+CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255),
     content TEXT,
@@ -6,11 +6,11 @@ CREATE TABLE Lessons (
     position INT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    course_id BIGINT REFERENCES Courses (id),
+    course_id BIGINT REFERENCES courses (id),
     is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE Courses (
+CREATE TABLE courses (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     module_id BIGINT REFERENCES modules (id),
     name VARCHAR(255),
@@ -20,7 +20,7 @@ CREATE TABLE Courses (
     is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE Modules (
+CREATE TABLE modules (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255),
     content VARCHAR(255),
@@ -28,61 +28,61 @@ CREATE TABLE Modules (
     updated_at TIMESTAMP
 );
 
-CREATE TABLE Programs (
+CREATE TABLE programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255),
     price NUMERIC,
-    type VARCHAR(255),
+    program_type VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
-CREATE TABLE ModuleCourse (
+CREATE TABLE moduleCourse (
   module_id INTEGER NOT NULL,
   course_id INTEGER NOT NULL,
   PRIMARY KEY (module_id, course_id),
-  FOREIGN KEY (module_id) REFERENCES Modules(id),
-  FOREIGN KEY (course_id) REFERENCES Courses(id)
+  FOREIGN KEY (module_id) REFERENCES modules(id),
+  FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
-CREATE TABLE ProgramModule (
+CREATE TABLE programModule (
   program_id INTEGER NOT NULL,
   module_id INTEGER NOT NULL,
   PRIMARY KEY (program_id, module_id),
-  FOREIGN KEY (program_id) REFERENCES Programs(id),
-  FOREIGN KEY (module_id) REFERENCES Modules(id)
+  FOREIGN KEY (program_id) REFERENCES programs(id),
+  FOREIGN KEY (module_id) REFERENCES modules(id)
 );
 
-CREATE TABLE Users (
+CREATE TABLE users (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_role ENUM('студент', 'учитель', 'админ') NOT NULL,
   full_name VARCHAR(255),
   email VARCHAR(255),
   password_hash VARCHAR(255),
-  FOREIGN KEY (teaching_group_id) REFERENCES TeachingGroups (id),
+  FOREIGN KEY (teaching_group_id) REFERENCES teachingGroups (id),
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE TeachingGroups (
+CREATE TABLE teachingGroups (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   slug VARCHAR(255),
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Enrollments (
+CREATE TABLE enrollments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES Users(id),
-  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (programs_id) REFERENCES programs(id),
   status ENUM('active', 'pending', 'cancelled', 'completed') NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Payments (
+CREATE TABLE payments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (enrollment_id) REFERENCES Enrollments(id),
+  FOREIGN KEY (enrollment_id) REFERENCES enrollments(id),
   amount NUMERIC,
   status ENUM('pending', 'paid', 'failed', 'refunded') NOT NULL,
   date TIMESTAMP,
@@ -90,10 +90,10 @@ CREATE TABLE Payments (
   updated_at TIMESTAMP
 );
 
-CREATE TABLE ProgramCompletions (
+CREATE TABLE programCompletions (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES Users(id),
-  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (programs_id) REFERENCES programs(id),
   status ENUM('active', 'completed', 'pending', 'cancelled') NOT NULL,
   start_at TIMESTAMP,
   end_at TIMESTAMP,
@@ -101,45 +101,45 @@ CREATE TABLE ProgramCompletions (
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Certificates (
+CREATE TABLE certificates (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES Users(id),
-  FOREIGN KEY (programs_id) REFERENCES Programs(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (programs_id) REFERENCES programs(id),
   url VARCHAR(255),
   release_at TIMESTAMP,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Quizzes (
+CREATE TABLE quizzes (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES Lessons(id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
   name VARCHAR(255),
   content TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Exercises (
+CREATE TABLE exercises (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES Lessons(id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
   name VARCHAR(255),
   url VARCHAR(255),
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Discussions (
+CREATE TABLE discussions (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES Lessons(id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
   debate TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
-CREATE TABLE Blog (
+CREATE TABLE blog (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES Users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
   title TEXT,
   content TEXT,
   status ENUM('created', 'in moderation', 'published', 'archived') NOT NULL,
