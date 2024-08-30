@@ -15,8 +15,7 @@ CREATE TABLE modules (
 
 CREATE TABLE courses (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    module_id BIGINT REFERENCES modules (id) NOT NULL,
-    title VARCHAR(255),
+    name VARCHAR(255),
     description TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
@@ -118,7 +117,7 @@ CREATE TABLE certificates (
 CREATE TABLE quizzes (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id BIGINT REFERENCES lessons(id) NOT NULL,
-  title VARCHAR(255),
+  name VARCHAR(255),
   content TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
