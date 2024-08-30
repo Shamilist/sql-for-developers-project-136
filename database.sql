@@ -1,10 +1,7 @@
-CREATE TABLE lessons (
+CREATE TABLE modules (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    course_id BIGINT REFERENCES courses (id),
     title VARCHAR(255),
-    content TEXT,
-    video_url VARCHAR(255),
-    position INT,
+    description VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE
@@ -20,10 +17,13 @@ CREATE TABLE courses (
     deleted_at BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE modules (
+CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    course_id BIGINT REFERENCES courses (id),
     title VARCHAR(255),
-    description VARCHAR(255),
+    content TEXT,
+    video_url VARCHAR(255),
+    position INT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE
