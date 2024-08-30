@@ -30,7 +30,7 @@ CREATE TABLE course_modules (
 
 CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    course_id BIGINT REFERENCES courses (id) NOT NULL,
+    course_id BIGINT REFERENCES courses (id),
     name VARCHAR(255),
     content TEXT,
     video_url VARCHAR(255),
