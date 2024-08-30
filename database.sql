@@ -6,7 +6,7 @@ CREATE TYPE status3 AS ENUM ('created', 'in moderation', 'published', 'archived'
 
 CREATE TABLE modules (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    title VARCHAR(255),
+    name VARCHAR(255),
     description VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
@@ -26,7 +26,7 @@ CREATE TABLE courses (
 CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     course_id BIGINT REFERENCES courses (id),
-    title VARCHAR(255),
+    name VARCHAR(255),
     content TEXT,
     video_url VARCHAR(255),
     position INT,
@@ -45,31 +45,15 @@ CREATE TABLE programs (
 );
 
 CREATE TABLE course_modules (
-  course_id INTEGER NOT NULL,
-  module_id INTEGER NOT NULL,
-  PRIMARY KEY (module_id, course_id),
-  FOREIGN KEY (module_id) REFERENCES modules(id),
-  FOREIGN KEY (course_id) REFERENCES courses(id)
+  course_id INTEGER REFERENCES courses(id) NOT NULL,
+  module_id INTEGER REFERENCES modules(id) NOT NULL,
+  PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE program_modules (
-  program_id INTEGER NOT NULL,
-  module_id INTEGER NOT NULL,
-  PRIMARY KEY (program_id, module_id),
-  FOREIGN KEY (program_id) REFERENCES programs(id),
-  FOREIGN KEY (module_id) REFERENCES modules(id)
-);
-
-CREATE TABLE users (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(255),
-  email VARCHAR(255),
-  password_hash VARCHAR(255),
-  role role NOT NULL,
-  FOREIGN KEY (teaching_group_id) REFERENCES teaching_groups (id),
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
-  deleted_at BOOLEAN DEFAULT FALSE
+  program_id INTEGER REFERENCES programs(id) NOT NULL,
+  module_id INTEGER REFERENCES modules(id) NOT NULL,
+  PRIMARY KEY (program_id, module_id)
 );
 
 CREATE TABLE teaching_groups (
@@ -79,10 +63,22 @@ CREATE TABLE teaching_groups (
   updated_at TIMESTAMP
 );
 
+CREATE TABLE users (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  password_hash VARCHAR(255),
+  role role NOT NULL,
+  teaching_group_id REFERENCES teaching_groups (id),
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  deleted_at BOOLEAN DEFAULT FALSE
+);
+
 CREATE TABLE enrollments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (programs_id) REFERENCES programs(id),
+  user_id REFERENCES users(id),
+  programs_id REFERENCES programs(id),
   status status1 NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
@@ -90,7 +86,7 @@ CREATE TABLE enrollments (
 
 CREATE TABLE payments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (enrollment_id) REFERENCES enrollments(id),
+  enrollment_id REFERENCES enrollments(id),
   amount NUMERIC,
   status status2 NOT NULL,
   paid_at TIMESTAMP,
@@ -100,8 +96,8 @@ CREATE TABLE payments (
 
 CREATE TABLE program_completions  (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (program_id) REFERENCES programs(id),
+  user_id REFERENCES users(id),
+  program_id REFERENCES programs(id),
   status status1 NOT NULL,
   started_at TIMESTAMP,
   completed_at TIMESTAMP,
@@ -111,8 +107,8 @@ CREATE TABLE program_completions  (
 
 CREATE TABLE certificates (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (program_id) REFERENCES programs(id),
+  user_id REFERENCES users(id),
+  program_id REFERENCES programs(id),
   url VARCHAR(255),
   issued_at TIMESTAMP,
   created_at TIMESTAMP,
@@ -121,7 +117,7 @@ CREATE TABLE certificates (
 
 CREATE TABLE quizzes (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  lesson_id REFERENCES lessons(id),
   title VARCHAR(255),
   content TEXT,
   created_at TIMESTAMP,
@@ -130,7 +126,7 @@ CREATE TABLE quizzes (
 
 CREATE TABLE exercises (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  lesson_id REFERENCES lessons(id),
   name VARCHAR(255),
   url VARCHAR(255),
   created_at TIMESTAMP,
@@ -139,8 +135,8 @@ CREATE TABLE exercises (
 
 CREATE TABLE discussions (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  lesson_id REFERENCES lessons(id),
+  user_id REFERENCES users(id),
   text TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
@@ -148,7 +144,7 @@ CREATE TABLE discussions (
 
 CREATE TABLE blogs (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  user_id REFERENCES users(id),
   title TEXT,
   content TEXT,
   status status3 NOT NULL,
