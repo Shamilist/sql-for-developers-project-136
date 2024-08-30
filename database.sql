@@ -14,12 +14,18 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE courses (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
     name VARCHAR(255),
     description TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE course_modules (
+  course_id BIGINT REFERENCES courses(id) NOT NULL,
+  module_id BIGINT REFERENCES modules(id) NOT NULL,
+  PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE lessons (
@@ -41,12 +47,6 @@ CREATE TABLE programs (
     program_type VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
-);
-
-CREATE TABLE course_modules (
-  course_id BIGINT REFERENCES courses(id) NOT NULL,
-  module_id BIGINT REFERENCES modules(id) NOT NULL,
-  PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE program_modules (
