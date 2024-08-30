@@ -78,7 +78,7 @@ CREATE TABLE users (
 CREATE TABLE enrollments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id REFERENCES users(id),
-  programs_id REFERENCES programs(id),
+  program_id REFERENCES programs(id),
   status status1 NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
