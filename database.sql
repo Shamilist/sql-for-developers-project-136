@@ -1,3 +1,9 @@
+CREATE TYPE role AS ENUM ('студент', 'учитель', 'админ');
+CREATE TYPE status1 AS ENUM ('active', 'pending', 'cancelled', 'completed');
+CREATE TYPE status2 AS ENUM ('pending', 'paid', 'failed', 'refunded');
+CREATE TYPE status3 AS ENUM ('created', 'in moderation', 'published', 'archived');
+
+
 CREATE TABLE modules (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     title VARCHAR(255),
@@ -59,7 +65,7 @@ CREATE TABLE users (
   name VARCHAR(255),
   email VARCHAR(255),
   password_hash VARCHAR(255),
-  role ENUM('студент', 'учитель', 'админ') NOT NULL,
+  role role NOT NULL,
   FOREIGN KEY (teaching_group_id) REFERENCES teaching_groups (id),
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
@@ -77,7 +83,7 @@ CREATE TABLE enrollments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (programs_id) REFERENCES programs(id),
-  status ENUM('active', 'pending', 'cancelled', 'completed') NOT NULL,
+  status status1 NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
@@ -86,7 +92,7 @@ CREATE TABLE payments (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   FOREIGN KEY (enrollment_id) REFERENCES enrollments(id),
   amount NUMERIC,
-  status ENUM('pending', 'paid', 'failed', 'refunded') NOT NULL,
+  status status2 NOT NULL,
   paid_at TIMESTAMP,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
@@ -96,7 +102,7 @@ CREATE TABLE program_completions  (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (program_id) REFERENCES programs(id),
-  status ENUM('active', 'completed', 'pending', 'cancelled') NOT NULL,
+  status status1 NOT NULL,
   started_at TIMESTAMP,
   completed_at TIMESTAMP,
   created_at TIMESTAMP,
@@ -145,7 +151,7 @@ CREATE TABLE blogs (
   FOREIGN KEY (user_id) REFERENCES users(id),
   title TEXT,
   content TEXT,
-  status ENUM('created', 'in moderation', 'published', 'archived') NOT NULL,
+  status status3 NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
