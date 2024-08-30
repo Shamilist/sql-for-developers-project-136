@@ -24,13 +24,13 @@ CREATE TABLE courses (
 
 CREATE TABLE course_modules (
   course_id BIGINT REFERENCES courses(id),
-  module_id BIGINT REFERENCES modules(id),
+  module_id BIGINT REFERENCES modules(id) NOT NULL,
   PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    course_id BIGINT REFERENCES courses (id),
+    course_id BIGINT REFERENCES courses (id) NOT NULL,
     name VARCHAR(255),
     content TEXT,
     video_url VARCHAR(255),
@@ -51,7 +51,7 @@ CREATE TABLE programs (
 
 CREATE TABLE program_modules (
   program_id BIGINT REFERENCES programs(id),
-  module_id BIGINT REFERENCES modules(id),
+  module_id BIGINT REFERENCES modules(id) NOT NULL,
   PRIMARY KEY (program_id, module_id)
 );
 
