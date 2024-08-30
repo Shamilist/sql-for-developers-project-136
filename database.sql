@@ -144,7 +144,7 @@ CREATE TABLE discussions (
 CREATE TABLE blogs (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id BIGINT REFERENCES users(id) NOT NULL,
-  title TEXT,
+  name TEXT,
   content TEXT,
   status status3 NOT NULL,
   created_at TIMESTAMP,
